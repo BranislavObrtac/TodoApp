@@ -1,5 +1,7 @@
 import {
+  Button,
   IconButton,
+  InputAdornment,
   Table,
   TableBody,
   TableCell,
@@ -13,10 +15,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 function TodoTable() {
   const context = useContext(TodoContext);
   const [addTodo, setAddTodo] = useState("");
+  const [editTableShown, setEditTableShown] = useState(false);
+  const [editTodo, setEditTodo] = useState("");
 
   return (
     <form
@@ -46,7 +52,7 @@ function TodoTable() {
             </TableCell>
             <TableCell align="right">
               <IconButton type="submit">
-                <AddIcon />
+                <AddIcon style={{ color: "green" }} />
               </IconButton>
             </TableCell>
           </TableRow>
@@ -56,13 +62,57 @@ function TodoTable() {
             .reverse()
             .map((todo, index) => (
               <TableRow key={"todo " + index}>
-                <TableCell key={todo}>{todo.name}</TableCell>
+                <TableCell>
+                  {editTableShown === todo.id ? (
+                    <TextField
+                      fullWidth={true}
+                      value={editTodo}
+                      onChange={(event) => {
+                        setEditTodo(event.target.value);
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <>
+                            <IconButton
+                              onClick={(event) => {
+                                context.updateTodo({
+                                  id: todo.id,
+                                  name: editTodo,
+                                }),
+                                  setEditTableShown(false);
+                              }}
+                            >
+                              <CheckCircleOutlineIcon
+                                style={{ color: "green" }}
+                              ></CheckCircleOutlineIcon>
+                            </IconButton>
+                            <IconButton
+                              onClick={() => setEditTableShown(false)}
+                            >
+                              <HighlightOffIcon
+                                style={{ color: "red" }}
+                              ></HighlightOffIcon>
+                            </IconButton>
+                          </>
+                        ),
+                      }}
+                    />
+                  ) : (
+                    todo.name
+                  )}
+                </TableCell>
+
                 <TableCell align="right">
-                  <IconButton>
-                    <EditIcon />
+                  <IconButton
+                    onClick={() => {
+                      setEditTableShown(todo.id);
+                      setEditTodo(todo.name);
+                    }}
+                  >
+                    <EditIcon style={{ color: "blue" }} />
                   </IconButton>
                   <IconButton>
-                    <DeleteIcon />
+                    <DeleteIcon style={{ color: "red" }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
