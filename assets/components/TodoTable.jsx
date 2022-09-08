@@ -1,15 +1,75 @@
+import {
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import React, { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
 
 function TodoTable() {
   const context = useContext(TodoContext);
+  const [addTodo, setAddTodo] = useState("");
 
   return (
-    <div>
-      {context.todos.map((todo) => (
-        <div key={todo.name}>{todo.name}</div>
-      ))}
-    </div>
+    <form
+      onSubmit={(event) => {
+        context.createTodo(event, { name: addTodo });
+      }}
+    >
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Task</TableCell>
+            <TableCell align="right">Action</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <TextField
+                value={addTodo}
+                onChange={(event) => {
+                  setAddTodo(event.target.value);
+                }}
+                label="New Task"
+                fullWidth={true}
+              />
+            </TableCell>
+            <TableCell align="right">
+              <IconButton type="submit">
+                <AddIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+
+          {context.todos
+            .slice()
+            .reverse()
+            .map((todo, index) => (
+              <TableRow key={"todo " + index}>
+                <TableCell key={todo}>{todo.name}</TableCell>
+                <TableCell align="right">
+                  <IconButton>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </form>
   );
 }
 
