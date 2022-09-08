@@ -1,4 +1,5 @@
 import React, { Component, createContext } from "react";
+import axios from "axios";
 
 export const TodoContext = createContext();
 
@@ -6,12 +7,9 @@ class TodoContextProvider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [
-        { id: 1, name: "do something 1" },
-        { id: 2, name: "do something 2" },
-        { id: 3, name: "do something 3" },
-      ],
+      todos: [],
     };
+    this.readTodo();
   }
 
   createTodo(event, todo) {
@@ -23,7 +21,18 @@ class TodoContextProvider extends Component {
     });
   }
 
-  readTodo() {}
+  readTodo() {
+    axios
+      .get("/api/todo/read")
+      .then((response) => {
+        this.setState({
+          todos: response.data,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   updateTodo(data) {
     let todos = [...this.state.todos];

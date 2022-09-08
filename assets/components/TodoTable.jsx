@@ -130,6 +130,7 @@ function TodoTable() {
           </TableBody>
         </Table>
       </form>
+
       {deleteConfirmationIsShown && (
         <DeleteDialog
           todo={todoToBeDeleted}
