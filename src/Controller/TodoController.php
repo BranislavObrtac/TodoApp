@@ -49,15 +49,20 @@ class TodoController extends AbstractController
         try {
             $this->entityManager->persist($todo);
             $this->entityManager->flush();
-            return $this->json([
-                "todo" => $todo->toArray(),
-            ]);
         } catch (Exception $exception) {
             error_log($exception);
+            return $this->json([
+                'message' => ['text' => ['Could not submit To-Do to the database.'], 'level' => 'error']
+            ]);
         }
+
+        return $this->json([
+            "todo" => $todo->toArray(),
+            'message' => ['text' => ['To-Do has been created !', 'Task: ' . $content->name], 'level' => 'success']
+        ]);
     }
 
-    #[Route('/delete/{id}', name: '/api/todo/delete', methods: "DELETE")]
+    #[Route('/delete/{id}', name: '/api/todo/delete')]
     public function delete(Todo $todo)
     {
         try {
@@ -66,6 +71,10 @@ class TodoController extends AbstractController
         } catch (Exception $exception) {
             error_log($exception);
         }
+
+        return $this->json([
+            "message" => "todo has been deleted"
+        ]);
     }
 
     #[Route('/update/{id}', name: '/api/todo/update/', methods: "PUT")]
