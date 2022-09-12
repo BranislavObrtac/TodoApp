@@ -6,6 +6,7 @@ use App\Entity\Todo;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use SebastianBergmann\Environment\Console;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,7 @@ class TodoController extends AbstractController
         $todo = new Todo();
 
         $todo->setName($content->name);
+        $todo->setDescription($content->description);
 
         try {
             $this->entityManager->persist($todo);
@@ -58,13 +60,15 @@ class TodoController extends AbstractController
 
         return $this->json([
             "todo" => $todo->toArray(),
-            'message' => ['text' => 'To-Do has been created !', 'level' => 'success']
+            'message' => ['text' => 'To-Do (' . $todo->getName() . ') has been created !', 'level' => 'success']
         ]);
     }
 
     #[Route('/delete/{id}', name: '/api/todo/delete')]
     public function delete(Todo $todo)
     {
+        $taskName = $todo->getName();
+
         try {
             $this->entityManager->remove($todo);
             $this->entityManager->flush();
@@ -76,7 +80,7 @@ class TodoController extends AbstractController
         }
 
         return $this->json([
-            'message' => ['text' => 'To-Do has been successfully deleted !', 'level' => 'success']
+            'message' => ['text' => 'To-Do (' . $taskName . ') has been successfully deleted !', 'level' => 'success']
         ]);
     }
 
@@ -84,8 +88,16 @@ class TodoController extends AbstractController
     public function update(Request $request, Todo $todo)
     {
         $content = json_decode($request->getContent());
+        $taskName = $todo->getName();
+
+        if ($todo->getName() === $content->name && $todo->getDescription() === $content->description) {
+            return $this->json([
+                'message' => ['text' => ['There was no change to tho TO-DO. Neither the name or the description.'], 'level' => 'error']
+            ]);
+        }
 
         $todo->setName(($content->name));
+        $todo->setDescription(($content->description));
 
         try {
             $this->entityManager->flush();
@@ -97,7 +109,8 @@ class TodoController extends AbstractController
         }
 
         return $this->json([
-            'message' => ['text' => 'To-Do has been successfully updated !', 'level' => 'success']
+            'todo' => $todo->toArray(),
+            'message' => ['text' => 'To-Do (' . $taskName . ') has been successfully updated !', 'level' => 'success']
         ]);
     }
 }
