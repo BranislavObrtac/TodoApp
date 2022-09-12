@@ -13,8 +13,8 @@ class Todo
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\Column(length: 20, type: "string", unique: true)]
+    private ?string $task = null;
 
     #[ORM\Column(length: 500)]
     private ?string $description = null;
@@ -24,14 +24,14 @@ class Todo
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTask(): ?string
     {
-        return $this->name;
+        return $this->task;
     }
 
-    public function setName(string $name): self
+    public function setTask(string $task): self
     {
-        $this->name = $name;
+        $this->task = $task;
 
         return $this;
     }
@@ -50,6 +50,6 @@ class Todo
 
     public function toArray()
     {
-        return ['id' => $this->id, 'name' => $this->name, 'description' => $this->description];
+        return ['id' => $this->id, 'task' => $this->task, 'description' => $this->description];
     }
 }

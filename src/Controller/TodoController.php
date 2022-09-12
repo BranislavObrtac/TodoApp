@@ -45,7 +45,7 @@ class TodoController extends AbstractController
 
         $todo = new Todo();
 
-        $todo->setName($content->name);
+        $todo->setTask($content->task);
         $todo->setDescription($content->description);
 
         try {
@@ -60,14 +60,14 @@ class TodoController extends AbstractController
 
         return $this->json([
             "todo" => $todo->toArray(),
-            'message' => ['text' => 'To-Do (' . $todo->getName() . ') has been created !', 'level' => 'success']
+            'message' => ['text' => 'To-Do (' . $todo->getTask() . ') has been created !', 'level' => 'success']
         ]);
     }
 
     #[Route('/delete/{id}', name: '/api/todo/delete')]
     public function delete(Todo $todo)
     {
-        $taskName = $todo->getName();
+        $taskName = $todo->getTask();
 
         try {
             $this->entityManager->remove($todo);
@@ -88,15 +88,15 @@ class TodoController extends AbstractController
     public function update(Request $request, Todo $todo)
     {
         $content = json_decode($request->getContent());
-        $taskName = $todo->getName();
+        $taskName = $todo->getTask();
 
-        if ($todo->getName() === $content->name && $todo->getDescription() === $content->description) {
+        if ($todo->getTask() === $content->task && $todo->getDescription() === $content->description) {
             return $this->json([
                 'message' => ['text' => ['There was no change to tho TO-DO. Neither the name or the description.'], 'level' => 'error']
             ]);
         }
 
-        $todo->setName(($content->name));
+        $todo->setTask(($content->task));
         $todo->setDescription(($content->description));
 
         try {

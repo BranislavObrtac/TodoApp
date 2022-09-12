@@ -21,12 +21,12 @@ function DeleteDialog(props) {
   return (
     <Dialog onClose={hide} fullWidth={true} maxWidth="sm" open={props.open}>
       <DialogTitle>Are you sure you wish to delete this to-do ?</DialogTitle>
-      <DialogContent>{props.todo.name}</DialogContent>
+      <DialogContent>{props.todo.task}</DialogContent>
       <DialogActions>
         <Button onClick={hide}>Cancel</Button>
         <Button
           onClick={() => {
-            context.deleteTodo({ id: props.todo.id, name: props.todo.name });
+            context.deleteTodo({ id: props.todo.id, task: props.todo.task });
             hide();
           }}
         >
@@ -42,7 +42,7 @@ DeleteDialog.propTypes = {
   setDeleteConfirmationIsShown: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    task: PropTypes.string.isRequired,
   }),
 };
 
