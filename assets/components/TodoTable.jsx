@@ -28,25 +28,34 @@ function TodoTable() {
     useState(false);
   const [todoToBeDeleted, setTodoToBeDeleted] = useState(null);
 
+  const onCreateSubmit = (event) => {
+    event.preventDefault();
+    context.createTodo(event, { name: addTodo });
+    setAddTodo("");
+  };
+
+  const onEditSubmit = (todoId, event) => {
+    event.preventDefault();
+    context.updateTodo({ id: todoId, name: editTodo });
+    setEditTableShown(false);
+  };
+
   return (
     <>
-      <form
-        onSubmit={(event) => {
-          context.createTodo(event, { name: addTodo });
-        }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Task</TableCell>
-              <TableCell align="right">Action</TableCell>
-            </TableRow>
-          </TableHead>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Task</TableCell>
+            <TableCell align="right">Action</TableCell>
+          </TableRow>
+        </TableHead>
 
-          <TableBody>
-            <TableRow>
-              <TableCell>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <form onSubmit={onCreateSubmit}>
                 <TextField
+                  type="text"
                   value={addTodo}
                   onChange={(event) => {
                     setAddTodo(event.target.value);
@@ -54,22 +63,26 @@ function TodoTable() {
                   label="New Task"
                   fullWidth={true}
                 />
-              </TableCell>
-              <TableCell align="right">
-                <IconButton type="submit">
-                  <AddIcon style={{ color: "green" }} />
-                </IconButton>
-              </TableCell>
-            </TableRow>
+              </form>
+            </TableCell>
+            <TableCell align="right">
+              <IconButton onClick={onCreateSubmit}>
+                <AddIcon style={{ color: "green" }} />
+              </IconButton>
+            </TableCell>
+          </TableRow>
 
-            {context.todos
-              .slice()
-              .reverse()
-              .map((todo, index) => (
-                <TableRow key={"todo " + index}>
-                  <TableCell>
-                    {editTableShown === todo.id ? (
+          {context.todos
+            .slice()
+            .reverse()
+            .map((todo, index) => (
+              <TableRow key={"todo " + index}>
+                <TableCell>
+                  {editTableShown === todo.id ? (
+                    <form onSubmit={onEditSubmit.bind(this, todo.id)}>
                       <TextField
+                        type="text"
+                        autoFocus={true}
                         fullWidth={true}
                         value={editTodo}
                         onChange={(event) => {
@@ -79,21 +92,13 @@ function TodoTable() {
                           endAdornment: (
                             <>
                               <IconButton
-                                onClick={(event) => {
-                                  context.updateTodo({
-                                    id: todo.id,
-                                    name: editTodo,
-                                  }),
-                                    setEditTableShown(false);
+                                onClick={() => {
+                                  setEditTableShown(false);
                                 }}
                               >
-                                <CheckCircleOutlineIcon
-                                  style={{ color: "green" }}
-                                ></CheckCircleOutlineIcon>
+                                <CheckCircleOutlineIcon />
                               </IconButton>
-                              <IconButton
-                                onClick={() => setEditTableShown(false)}
-                              >
+                              <IconButton>
                                 <HighlightOffIcon
                                   style={{ color: "red" }}
                                 ></HighlightOffIcon>
@@ -102,35 +107,34 @@ function TodoTable() {
                           ),
                         }}
                       />
-                    ) : (
-                      todo.name
-                    )}
-                  </TableCell>
+                    </form>
+                  ) : (
+                    todo.name
+                  )}
+                </TableCell>
 
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => {
-                        setEditTableShown(todo.id);
-                        setEditTodo(todo.name);
-                      }}
-                    >
-                      <EditIcon style={{ color: "blue" }} />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        setDeleteConfirmationIsShown(true);
-                        setTodoToBeDeleted(todo);
-                      }}
-                    >
-                      <DeleteIcon style={{ color: "red" }} />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </form>
-
+                <TableCell align="right">
+                  <IconButton
+                    onClick={() => {
+                      setEditTableShown(todo.id);
+                      setEditTodo(todo.name);
+                    }}
+                  >
+                    <EditIcon style={{ color: "blue" }} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      setDeleteConfirmationIsShown(true);
+                      setTodoToBeDeleted(todo);
+                    }}
+                  >
+                    <DeleteIcon style={{ color: "red" }} />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
       {deleteConfirmationIsShown && (
         <DeleteDialog
           todo={todoToBeDeleted}

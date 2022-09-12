@@ -58,7 +58,7 @@ class TodoController extends AbstractController
 
         return $this->json([
             "todo" => $todo->toArray(),
-            'message' => ['text' => ['To-Do has been created !', 'Task: ' . $content->name], 'level' => 'success']
+            'message' => ['text' => 'To-Do has been created !', 'level' => 'success']
         ]);
     }
 
@@ -70,10 +70,13 @@ class TodoController extends AbstractController
             $this->entityManager->flush();
         } catch (Exception $exception) {
             error_log($exception);
+            return $this->json([
+                'message' => ['text' => ['Could not delete To-Do to from the database.'], 'level' => 'error']
+            ]);
         }
 
         return $this->json([
-            "message" => "todo has been deleted"
+            'message' => ['text' => 'To-Do has been successfully deleted !', 'level' => 'success']
         ]);
     }
 
@@ -88,10 +91,13 @@ class TodoController extends AbstractController
             $this->entityManager->flush();
         } catch (Exception $exception) {
             error_log($exception);
+            return $this->json([
+                'message' => ['text' => ['Could not update To-Do to the database.'], 'level' => 'error']
+            ]);
         }
 
         return $this->json([
-            "message" => "todo has been updated"
+            'message' => ['text' => 'To-Do has been successfully updated !', 'level' => 'success']
         ]);
     }
 }
