@@ -1,3 +1,4 @@
+import { ContentCopy } from "@mui/icons-material";
 import { Button, Snackbar, SnackbarContent } from "@mui/material";
 import React, { Fragment, useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
@@ -23,12 +24,7 @@ function AppSnackbar() {
       {context.message.text && (
         <SnackbarContent
           style={{ backgroundColor: checkLevel(context.message.level) }}
-          message={context.message.text.map((text, index) => (
-            <Fragment key={index + " " + text}>
-              <span>{text}</span>
-              <br></br>
-            </Fragment>
-          ))}
+          message={context.message.text}
           action={[
             <Button
               color="inherit"
