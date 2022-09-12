@@ -1,7 +1,5 @@
 import {
-  Button,
   IconButton,
-  InputAdornment,
   Table,
   TableBody,
   TableCell,
@@ -9,18 +7,23 @@ import {
   TableRow,
   TextField,
   Typography,
-} from "@mui/material";
+} from "@material-ui/core";
 import React, { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import DeleteDialog from "./DeleteDialog";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  thead: {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
 
 function TodoTable() {
   const context = useContext(TodoContext);
@@ -32,6 +35,7 @@ function TodoTable() {
   const [deleteConfirmationIsShown, setDeleteConfirmationIsShown] =
     useState(false);
   const [todoToBeDeleted, setTodoToBeDeleted] = useState(null);
+  const classes = useStyles();
 
   const onCreateSubmit = (event) => {
     event.preventDefault();
@@ -57,7 +61,7 @@ function TodoTable() {
     <>
       <Table>
         {/* HEAD */}
-        <TableHead>
+        <TableHead className={classes.thead}>
           <TableRow>
             <TableCell>Task</TableCell>
             <TableCell>Description</TableCell>
@@ -103,7 +107,7 @@ function TodoTable() {
             {/* ACTION ICON CELL */}
             <TableCell align="right">
               <IconButton onClick={onCreateSubmit}>
-                <AddIcon style={{ color: "green" }} />
+                <AddIcon />
               </IconButton>
             </TableCell>
           </TableRow>

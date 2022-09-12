@@ -1,19 +1,21 @@
-import { CssBaseline } from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import AppSnackbar from "./components/AppSnackbar";
+import DefaulutThemeProvider from "./components/themes/DefaulutThemeProvider";
 import TodoTable from "./components/TodoTable";
 import TodoContextProvider from "./context/TodoContext";
 
 function App() {
   return (
     <TodoContextProvider>
-      <CssBaseline>
-        <TodoTable />
-        <AppSnackbar />
-      </CssBaseline>
+      <TodoTable />
+      <AppSnackbar />
     </TodoContextProvider>
   );
 }
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(
+  <DefaulutThemeProvider>
+    <App />
+  </DefaulutThemeProvider>
+);
