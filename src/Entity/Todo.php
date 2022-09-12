@@ -13,7 +13,7 @@ class Todo
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20, type: "string", unique: true)]
+    #[ORM\Column(length: 20, unique: true)]
     private ?string $task = null;
 
     #[ORM\Column(length: 500)]
