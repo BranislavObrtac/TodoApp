@@ -17,23 +17,3 @@ function DefaulutThemeProvider(props) {
 }
 
 export default DefaulutThemeProvider;
-
-/* import React from "react";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
-
-function DefaulutThemeProvider(props) {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {props.children}
-    </ThemeProvider>
-  );
-}
-
-export default DefaulutThemeProvider; */

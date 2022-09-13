@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   thead: {
     backgroundColor: theme.palette.primary.main,
   },
+  size: {
+    fontSize: "1rem",
+  },
 }));
 
 function TodoTable() {
@@ -61,13 +64,7 @@ function TodoTable() {
     <>
       <Table>
         {/* HEAD */}
-        <TableHead className={classes.thead}>
-          <TableRow>
-            <TableCell>Task</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell align="right">Action</TableCell>
-          </TableRow>
-        </TableHead>
+        <TableHead></TableHead>
 
         {/* BODY */}
         <TableBody>
@@ -112,6 +109,14 @@ function TodoTable() {
             </TableCell>
           </TableRow>
 
+          <TableRow className={classes.thead}>
+            <TableCell className={classes.size}>Task</TableCell>
+            <TableCell className={classes.size}>Description</TableCell>
+            <TableCell className={classes.size} align="right">
+              Action
+            </TableCell>
+          </TableRow>
+
           {/* DATA */}
           {context.todos
             .slice()
@@ -133,7 +138,10 @@ function TodoTable() {
                       />
                     </form>
                   ) : (
-                    <Typography>{todo.task}</Typography>
+                    <Typography>
+                      <span style={{ marginRight: "2vw" }}>{index + 1}.</span>
+                      {todo.task}
+                    </Typography>
                   )}
                 </TableCell>
 
